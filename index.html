@@ -167,14 +167,16 @@
       .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
     }
     @media(max-width:600px){
-      .wrap{padding:26px 14px 44px}
+      .wrap{padding:26px 10px 44px}
       .tools{flex-direction:column;align-items:stretch}
       .search{width:100%}
       .count{align-self:flex-start}
-      .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-      .card{min-height:132px}
-      .name{font-size:20px;max-width:78%}
-      .icon{font-size:28px}
+      .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+      .card{min-height:126px;padding:10px;border-radius:10px}
+      .index{font-size:9px}
+      .name{margin-top:12px;max-width:100%;padding-bottom:28px;font-size:14px;line-height:1.25}
+      .icon{right:9px;bottom:8px;width:28px;height:28px;font-size:22px;line-height:28px}
+      .new-badge{top:8px;right:8px;padding:4px 6px 3px;font-size:8px}
     }
   </style>
 </head>

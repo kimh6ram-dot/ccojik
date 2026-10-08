@@ -312,6 +312,11 @@
         'cutoff-calculator','cyber-lie-detector','will-you-date-me','ccojik'
       ]);
       const ignored=new Set(['kimharam']);
+      const gameIcons={
+        'stack-a-sugarcube':'./assets/icon-sugarcube.png',
+        'stack-a-pancake':'./assets/icon-pancake.jpeg',
+        'stack-a-burger':'./assets/icon-burger.jpeg'
+      };
 
       try{
         const res=await fetch('https://api.github.com/users/kimh6ram-dot/repos?per_page=100&type=owner&sort=created&direction=desc',{
@@ -334,6 +339,7 @@
           return {
             id:repo.name,
             name:pageTitle||cleanTitle(repo.description)||slugToName(repo.name),
+            image:gameIcons[repo.name]||'',
             icon:'🎮',
             url:'https://kimh6ram-dot.github.io/'+repo.name+'/',
             discoveredAt:repo.created_at||repo.pushed_at||''

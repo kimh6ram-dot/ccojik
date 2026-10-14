@@ -132,10 +132,16 @@
       image-rendering:pixelated;
       opacity:1;
     }
-    .new-badge{
+    .badges{
       position:absolute;
       top:12px;
       right:12px;
+      display:flex;
+      align-items:center;
+      gap:4px;
+    }
+    .new-badge,
+    .event-badge{
       padding:5px 8px 4px;
       border-radius:999px;
       background:#111;
@@ -146,6 +152,7 @@
       letter-spacing:.04em;
       box-shadow:0 2px 8px rgba(0,0,0,.12);
     }
+    .event-badge{background:#ff3b5c}
     .empty{
       display:none;
       grid-column:1/-1;
@@ -177,7 +184,8 @@
       .name{margin-top:12px;max-width:100%;padding-bottom:28px;font-size:14px;line-height:1.25}
       .icon{right:9px;bottom:8px;width:28px;height:28px;font-size:22px;line-height:28px}
       .icon-img{right:4px;bottom:4px;width:38px;height:38px}
-      .new-badge{top:8px;right:8px;padding:4px 6px 3px;font-size:8px}
+      .badges{top:8px;right:8px;gap:3px}
+      .new-badge,.event-badge{padding:4px 6px 3px;font-size:8px}
     }
   </style>
 </head>
@@ -202,6 +210,7 @@
   <script src="./analytics.js"></script>
   <script>
     const baseSites = [
+      {id:'draw-with-poop', name:'똥으로 그리세요', icon:'💩', event:true, url:'https://kimh6ram-dot.github.io/draw-with-poop/'},
       {id:'stack-a-sugarcube', name:'각설탕 쌓기', image:'./assets/icon-sugarcube.png?v=2', url:'https://kimh6ram-dot.github.io/stack-a-sugarcube/'},
       {id:'stack-a-pancake', name:'팬케이크 쌓기', image:'./assets/icon-pancake.png?v=2', url:'https://kimh6ram-dot.github.io/stack-a-pancake/'},
       {id:'stack-a-burger', name:'햄버거 쌓기', image:'./assets/icon-burger.png?v=2', url:'https://kimh6ram-dot.github.io/stack-a-burger/'},
@@ -241,7 +250,7 @@
         return `
           <a class="card" href="${s.url}" target="_blank" rel="noopener" data-id="${s.id}">
             <div class="index">${String(idx).padStart(2,'0')}</div>
-            ${idx<=2?'<div class="new-badge">NEW!</div>':''}
+            ${(idx<=2||s.event)?`<div class="badges">${s.event?'<div class="event-badge">EVENT</div>':''}${idx<=2?'<div class="new-badge">NEW!</div>':''}</div>`:''}
             <div class="name">${s.name}</div>
             ${iconHtml}
           </a>

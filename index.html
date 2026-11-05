@@ -219,6 +219,7 @@
   <script src="./analytics.js"></script>
   <script>
     const baseSites = [
+      {id:'slice-master', name:'썰기의 달인', icon:'🔪', url:'https://kimh6ram-dot.github.io/slice-master/'},
       {id:'peel-apple-once', name:'사과 깎기', icon:'🍎', url:'https://kimh6ram-dot.github.io/peel-apple-once/'},
       {id:'draw-with-poop', name:'똥으로 그리세요', image:'./assets/icon-poop-event.png?v=1', event:true, url:'https://kimh6ram-dot.github.io/draw-with-poop/'},
       {id:'stack-a-sugarcube', name:'각설탕 쌓기', image:'./assets/icon-sugarcube.png?v=2', url:'https://kimh6ram-dot.github.io/stack-a-sugarcube/'},
@@ -332,7 +333,7 @@
     async function discoverKimGames(){
       const known=new Set([
         '_parking','toothpaste-poop','will-you-marry-me','will-you-come',
-        'cutoff-calculator','cyber-lie-detector','will-you-date-me','peel-apple-once','ccojik'
+        'cutoff-calculator','cyber-lie-detector','will-you-date-me','peel-apple-once','slice-master','ccojik'
       ]);
       const ignored=new Set(['kimharam']);
       const gameIcons={

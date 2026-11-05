@@ -119,6 +119,7 @@
       font-weight:800;
       letter-spacing:-.04em;
       word-break:keep-all;
+      padding-bottom:22px;
     }
     .icon{
       position:absolute;
@@ -132,6 +133,16 @@
       opacity:.92;
     }
     .icon-img{right:6px;bottom:4px;width:54px;height:54px;object-fit:contain;display:block}
+    .traffic-count{
+      position:absolute;
+      left:14px;
+      bottom:13px;
+      color:var(--muted);
+      font-size:11px;
+      line-height:1;
+      font-weight:600;
+      letter-spacing:-.02em;
+    }
     .sprite-icon{
       background-image:url("./assets/icons-01-15.png?v=3");
       background-repeat:no-repeat;
@@ -191,6 +202,7 @@
       .name{margin-top:12px;max-width:100%;padding-bottom:28px;font-size:14px;line-height:1.25}
       .icon{right:9px;bottom:8px;width:28px;height:28px;font-size:22px;line-height:28px}
       .icon-img{right:4px;bottom:4px;width:38px;height:38px}
+      .traffic-count{left:10px;bottom:9px;font-size:9px}
       .badges{top:8px;right:8px;gap:3px}
       .new-badge,.event-badge{padding:4px 6px 3px;font-size:8px}
     }
@@ -247,6 +259,53 @@
     const count=document.getElementById('count');
     const empty=document.getElementById('empty');
 
+    const TRAFFIC_API='https://countapi.mileshilliard.com/api/v1/get/';
+    const TRAFFIC_PREFIX='kimh6ram-20260921-';
+    const TRAFFIC_IDS={
+      'film-master':'ccojik-film-master',
+      'parking':'_parking',
+      'clown-sim':'ccojik-clown-sim',
+      'deco-cake':'ccojik-deco-cake',
+      'hint-draw':'ccojik-hint-draw',
+      'montage':'ccojik-montage',
+      'draw-celeb':'ccojik-draw-celeb',
+      'blind-draw':'ccojik-blind-draw',
+      'food':'ccojik-food',
+      'kaltoe':'ccojik-kaltoe'
+    };
+    const TRAFFIC_BASELINES={'stack-a-burger':1306};
+    const trafficCache=new Map();
+    const trafficNumber=new Intl.NumberFormat('ko-KR');
+
+    function trafficKey(project){
+      return (TRAFFIC_PREFIX+project+'-page_view').replace(/[^a-z0-9_-]+/g,'-');
+    }
+
+    function getTrafficViews(project){
+      if(trafficCache.has(project))return trafficCache.get(project);
+      const request=fetch(TRAFFIC_API+encodeURIComponent(trafficKey(project)),{cache:'no-store'})
+        .then(r=>r.ok?r.json():{value:0})
+        .then(data=>Number(data.value)||0)
+        .catch(()=>null);
+      trafficCache.set(project,request);
+      return request;
+    }
+
+    async function loadTrafficCounts(){
+      const elements=[...document.querySelectorAll('.traffic-count')];
+      await Promise.all(elements.map(async el=>{
+        const project=el.dataset.trafficId;
+        const liveViews=await getTrafficViews(project);
+        if(!el.isConnected)return;
+        if(liveViews===null){
+          el.textContent='접속 수 -';
+          return;
+        }
+        const baseline=Number(el.dataset.baseline)||0;
+        el.textContent='접속 '+trafficNumber.format(liveViews+baseline)+'회';
+      }));
+    }
+
     function render(list){
       grid.innerHTML=list.map((s)=>{
         const idx=sites.indexOf(s)+1;
@@ -260,12 +319,14 @@
             <div class="index">${String(idx).padStart(2,'0')}</div>
             ${(idx<=2||s.event)?`<div class="badges">${s.event?'<div class="event-badge">EVENT</div>':''}${idx<=2?'<div class="new-badge">NEW!</div>':''}</div>`:''}
             <div class="name">${s.name}</div>
+            <div class="traffic-count" data-traffic-id="${TRAFFIC_IDS[s.id]||s.id}" data-baseline="${TRAFFIC_BASELINES[s.id]||0}">접속 수 확인 중</div>
             ${iconHtml}
           </a>
         `;
       }).join('');
       count.textContent='총 '+list.length+'개';
       empty.style.display=list.length?'none':'block';
+      loadTrafficCounts();
     }
 
     function applySearch(){
